@@ -1,0 +1,10 @@
+# Comments starts with "#"
+# Note: Important!!
+# No space/tabs at the beginning of the line, because
+# space/tabs at the beginning of the line treated as line continium!
+[PATHS]
+ta_dir_path = result/lib/TAs
+core_lib_path = result/lib
+opentee_bin = result/bin/opentee-engine
+subprocess_manager = libManagerApi.so
+subprocess_launcher = libLauncherApi.so
