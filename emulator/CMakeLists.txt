@@ -97,6 +97,7 @@ add_library(InternalApi SHARED
     internal_api/tee_internal_client_api.c
     internal_api/tee_memory.c
     internal_api/tee_panic.c
+    internal_api/tee_property.c
     internal_api/tee_time_api.c
 
     # Crypto operations

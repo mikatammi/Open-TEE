@@ -98,6 +98,20 @@ if(OPENTEE_BUILD_EXAMPLES)
 endif()
 
 # ============================================================================
+# CA: property_test_ca (Triggers TA tests for Property Access Functions)
+# ============================================================================
+
+if(OPENTEE_BUILD_EXAMPLES)
+    opentee_add_ca(
+        NAME property_test_ca
+        SOURCES
+            property_test_ca/property_test_ca.c
+        INCLUDE_DIRS
+            ${CMAKE_CURRENT_SOURCE_DIR}/property_test_ca
+    )
+endif()
+
+# ============================================================================
 # CA: omnishare-fuse (OmniShare FUSE Filesystem)
 # ============================================================================
 

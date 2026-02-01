@@ -41,7 +41,7 @@ typedef union {
 
 typedef struct __TEE_TASessionHandle *TEE_TASessionHandle;
 
-typedef struct __TEE_PropSetHandle *TEE_PropSetHandle;
+typedef struct OT_TEE_PropSetHandle *TEE_PropSetHandle;
 
 /* clang-format off */
 /* Paramater Types */
