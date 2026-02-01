@@ -1,5 +1,5 @@
 /*****************************************************************************
-** Copyright (C) 2013 Intel Corporation.                                    **
+** SPDX-FileCopyrightText: 2026 Mika Tammi                                  **
 **                                                                          **
 ** Licensed under the Apache License, Version 2.0 (the "License");          **
 ** you may not use this file except in compliance with the License.         **
@@ -14,19 +14,15 @@
 ** limitations under the License.                                           **
 *****************************************************************************/
 
-#ifndef __TEE_INTERNAL_API_EMU_H__
-#define __TEE_INTERNAL_API_EMU_H__
+#ifdef TA_PLUGIN
 
-#include "../internal_api/tee_data_types.h"
-#include "../internal_api/tee_memory.h"
-#include "../internal_api/tee_ta_interface.h"
-#include "../internal_api/tee_time_api.h"
-#include "../internal_api/tee_storage_api.h"
-#include "../internal_api/tee_panic.h"
-#include "../internal_api/tee_crypto_api.h"
-#include "../internal_api/tee_bigint.h"
-#include "../internal_api/tee_internal_client_api.h"
-#include "../internal_api/tee_cancellation.h"
-#include "../internal_api/tee_property.h"
+#include "property_test_ctl.h"
+#include "tee_ta_properties.h"
+
+SET_TA_PROPERTIES(PROPERTY_TEST_TA_UUID, 4096, /* dataSize */
+		  512,			       /* stackSize */
+		  0,			       /* singletonInstance */
+		  0,			       /* multiSession */
+		  0)			       /* instanceKeepAlive */
 
 #endif

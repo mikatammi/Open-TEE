@@ -41,7 +41,7 @@ typedef union {
 
 typedef struct __TEE_TASessionHandle *TEE_TASessionHandle;
 
-typedef struct __TEE_PropSetHandle *TEE_PropSetHandle;
+typedef struct OT_TEE_PropSetHandle *TEE_PropSetHandle;
 
 /* clang-format off */
 /* Paramater Types */
@@ -66,6 +66,8 @@ typedef struct __TEE_PropSetHandle *TEE_PropSetHandle;
 #define TEE_PROPSET_CURRENT_TA		(TEE_PropSetHandle)0xFFFFFFFF
 #define TEE_PROPSET_CURRENT_CLIENT	(TEE_PropSetHandle)0xFFFFFFFE
 #define TEE_PROPSET_TEE_IMPLEMENTATION	(TEE_PropSetHandle)0xFFFFFFFD
+
+#define TEE_HANDLE_NULL			0
 
 #define TEE_ACCESS_READ			0x00000001
 #define TEE_ACCESS_WRITE		0x00000002

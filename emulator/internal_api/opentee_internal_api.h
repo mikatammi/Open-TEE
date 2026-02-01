@@ -52,6 +52,8 @@ struct __TEE_ObjectEnumHandle {
 #define COM_MGR_CMD_ID_WRITE_CREATE_INIT_DATA 0x0F
 #define COM_MGR_CMD_ID_OBJECTINFO 0x10
 
+#define COM_MGR_CMD_ID_GET_TA_CONFIG 0x11
+
 #define COM_MGR_PERSISTENT_DATA_OBJECT 0xCD
 
 struct com_mrg_open_persistent {

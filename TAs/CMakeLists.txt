@@ -50,6 +50,19 @@ if(OPENTEE_BUILD_EXAMPLES)
 endif()
 
 # ============================================================================
+# TA: property_test_ta (Tests for Property Access Functions)
+# ============================================================================
+
+opentee_add_ta(
+    NAME property_test_ta
+    SOURCES
+        property_test_ta/open_tee_conf.c
+        property_test_ta/property_test_ta.c
+    INCLUDE_DIRS
+        ${CMAKE_SOURCE_DIR}/CAs/property_test_ca
+)
+
+# ============================================================================
 # TA: ta_conn_test (Connection Test TA)
 # Note: This TA includes internal API tests (crypto, storage, ta2ta)
 # ============================================================================

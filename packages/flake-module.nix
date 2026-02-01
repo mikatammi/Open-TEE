@@ -53,7 +53,8 @@
                 case "$name" in
                   libpkcs11_ta.so|libexample_ta.so|libexample_digest.so|libsign_ecdsa_256.so|\
                   libta_conn_test.so|libta2ta_conn_test.so|libta_panic_crash.so|libta_services.so|\
-                  libuser_study.so|libCryptoTest.so|libStorageTest.so|libta2taTest.so)
+                  libuser_study.so|libCryptoTest.so|libStorageTest.so|libta2taTest.so|\
+                  libproperty_test_ta.so)
                     mv "$ta" $out/lib/TAs/ 2>/dev/null || true
                     ;;
                 esac

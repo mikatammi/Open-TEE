@@ -1329,6 +1329,29 @@ static TEE_Result mgr_cmd_objectinfo(struct com_mgr_invoke_cmd_payload *in,
 	return ret;
 }
 
+static TEE_Result mgr_cmd_get_ta_config(proc_t ta_proc, struct com_mgr_invoke_cmd_payload *out)
+{
+	TEE_Result ret = TEE_SUCCESS;
+	struct trusted_app_propertie *ta_properties;
+
+	if (ta_dir_watch_lock_mutex())
+		return TEE_ERROR_BUSY;
+
+	ta_properties = ta_dir_watch_props(&ta_proc->ta_uuid);
+	if (!ta_properties) {
+		OT_LOG(LOG_ERR, "TA with requested UUID is not found");
+		ret = TEE_ERROR_ITEM_NOT_FOUND;
+		goto err;
+	}
+	out->size = sizeof(struct gpd_ta_config);
+	out->data = calloc(1, out->size);
+	*((struct gpd_ta_config *)out->data) = ta_properties->user_config;
+
+err:
+	ta_dir_watch_unlock_mutex();
+	return ret;
+}
+
 static void invoke_mgr_cmd(struct manager_msg *man_msg)
 {
 	struct com_msg_invoke_mgr_cmd *invoke_msg = man_msg->msg;
@@ -1348,14 +1371,12 @@ static void invoke_mgr_cmd(struct manager_msg *man_msg)
 		goto discard_msg;
 	}
 
-	/* REsponse to invoke to command can be received only from TA */
+	/* Response to invoke command can be received only from TA */
 	if (invoke_msg->msg_hdr.msg_type == COM_TYPE_RESPONSE &&
 	    man_msg->proc->p_type != proc_t_TA) {
 		OT_LOG(LOG_ERR, "Invalid sender");
 		goto discard_msg;
-	}
-
-	if (invoke_msg->msg_hdr.msg_type == COM_TYPE_QUERY)
+	} else if (invoke_msg->msg_hdr.msg_type == COM_TYPE_QUERY)
 		invoke_msg->msg_hdr.msg_type = COM_TYPE_RESPONSE;
 
 	in.data = &invoke_msg->payload.data;
@@ -1413,6 +1434,10 @@ static void invoke_mgr_cmd(struct manager_msg *man_msg)
 
 	case COM_MGR_CMD_ID_OBJECTINFO:
 		retVal = mgr_cmd_objectinfo(&in, &out);
+		break;
+
+	case COM_MGR_CMD_ID_GET_TA_CONFIG:
+		retVal = mgr_cmd_get_ta_config(man_msg->proc, &out);
 		break;
 	default:
 		retVal = TEE_ERROR_NOT_SUPPORTED;
