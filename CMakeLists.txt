@@ -23,6 +23,7 @@ option(OPENTEE_BUILD_EXAMPLES "Build example TAs and CAs" ON)
 option(OPENTEE_ENABLE_LOGGING "Enable logging support" ON)
 option(OPENTEE_INSTALL_TAS "Install Trusted Applications" ON)
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+option(OPENTEE_ENABLE_COVERAGE "Enable code coverage (gcov)" OFF)
 
 # ============================================================================
 # CMake Configuration (3.25+ features)
@@ -78,6 +79,13 @@ add_compile_options(
 # Define logging macro if enabled
 if(OPENTEE_ENABLE_LOGGING)
     add_compile_definitions(OT_LOGGING)
+endif()
+
+if(OPENTEE_ENABLE_COVERAGE)
+    message(STATUS "Code coverage instrumentation enabled")
+    add_compile_options(--coverage -O0)
+    add_link_options(--coverage)
+    add_compile_definitions(OPENTEE_COVERAGE)
 endif()
 
 # ============================================================================
@@ -224,6 +232,7 @@ message(STATUS "  Options:")
 message(STATUS "    Build tests:    ${OPENTEE_BUILD_TESTS}")
 message(STATUS "    Build examples: ${OPENTEE_BUILD_EXAMPLES}")
 message(STATUS "    Enable logging: ${OPENTEE_ENABLE_LOGGING}")
+message(STATUS "    Coverage:       ${OPENTEE_ENABLE_COVERAGE}")
 message(STATUS "")
 message(STATUS "  Dependencies:")
 message(STATUS "    OpenSSL:  ${OPENSSL_VERSION}")

@@ -615,7 +615,11 @@ static int comm_launcher_to_launch_ta(struct manager_msg *man_msg, int *new_ta_f
 
 err:
 	if (*new_ta_pid != -1)
+#ifdef OPENTEE_COVERAGE
+		kill(*new_ta_pid, SIGTERM);
+#else
 		kill(*new_ta_pid, SIGKILL);
+#endif
 
 	free(recv_created_msg);
 	return 1;
@@ -798,7 +802,11 @@ static int launch_and_init_ta(struct manager_msg *man_msg, TEE_UUID *ta_uuid, pr
 	return 0;
 
 err_3:
+#ifdef OPENTEE_COVERAGE
+	kill(new_ta_pid, SIGTERM);
+#else
 	kill(new_ta_pid, SIGKILL);
+#endif
 err_2:
 	free(*new_ta_proc);
 	*new_ta_proc = NULL;
@@ -1930,7 +1938,11 @@ static void term_proc_by_fd_err(proc_t proc)
 	} else if (proc->p_type == proc_t_TA) {
 
 		/* TA socket dead. Kill TA and then it will generate SIGCHLD */
+#ifdef OPENTEE_COVERAGE
+		if (kill(proc->pid, SIGTERM)) {
+#else
 		if (kill(proc->pid, SIGKILL)) {
+#endif
 
 			if (errno != ESRCH)
 				OT_LOG(LOG_ERR, "Failed to send signal");

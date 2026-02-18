@@ -91,6 +91,16 @@ bool cancellation_flag;
 /* Maximum epoll events */
 #define MAX_CURR_EVENTS 5
 
+#ifdef OPENTEE_COVERAGE
+extern void __gcov_dump(void);
+static void coverage_sigterm_handler(int sig)
+{
+	(void)sig;
+	__gcov_dump();
+	_exit(0);
+}
+#endif
+
 #ifdef GRACEFUL_TERMINATION
 static void clear_queues()
 {
@@ -139,7 +149,11 @@ int ta_process_loop(void *arg)
 
 	/* Launchers manger socket is not needed in TA */
 	close(ctl_params->comm_sock_fd);
+#ifdef OPENTEE_COVERAGE
+	prctl(PR_SET_PDEATHSIG, SIGTERM);
+#else
 	prctl(PR_SET_PDEATHSIG, SIGKILL);
+#endif
 	closelog();
 
 	/* epoll doesn't clone properly, re init per TA process */
@@ -172,6 +186,14 @@ int ta_process_loop(void *arg)
 		OT_LOG(LOG_ERR, "Sigempty set failed: %s", strerror(errno));
 		exit(TA_EXIT_LAUNCH_FAILED);
 	}
+
+#ifdef OPENTEE_COVERAGE
+	{
+		struct sigaction sa = {0};
+		sa.sa_handler = coverage_sigterm_handler;
+		sigaction(SIGTERM, &sa, NULL);
+	}
+#endif
 
 	/* create an eventfd, that will allow the writer to increment the count by 1
 	 * for each new event, and the reader to decrement by 1 each time, this will allow the

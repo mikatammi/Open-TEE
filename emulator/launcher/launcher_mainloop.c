@@ -265,14 +265,22 @@ int lib_main_loop(struct core_control *ctl_params)
 				if (send_fd(ctl_params->comm_sock_fd, &sockfd[0], 1, NULL, 0) ==
 				    -1) {
 					OT_LOG(LOG_ERR, "Failed to send TA sock");
+#ifdef OPENTEE_COVERAGE
+					kill(new_proc_pid, SIGTERM);
+#else
 					kill(new_proc_pid, SIGKILL);
+#endif
 					/* TODO: Check what is causing error, but for now
 					 * lets hope the error clears itself*/
 				}
 
 			} else {
 				OT_LOG(LOG_ERR, "Failed to send response msg");
+#ifdef OPENTEE_COVERAGE
+				kill(new_proc_pid, SIGTERM);
+#else
 				kill(new_proc_pid, SIGKILL);
+#endif
 				/* TODO: Check what is causing error, but for now lets
 				 *  hope the error clears itself*/
 			}
